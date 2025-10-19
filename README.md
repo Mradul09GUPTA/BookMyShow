@@ -1,101 +1,140 @@
-# BookMyShow
-🎬 BookMyShow Clone – Movie Ticket Booking System
+# 🎬 BookMyShow Clone – Movie Ticket Booking System  
 
-This project is a backend application built using Spring Boot, Java, MySQL, and Maven, designed to replicate the core functionality of the popular BookMyShow platform. It enables users to register, log in securely, browse movies, view available shows, and book seats concurrently — all while maintaining data consistency and security at scale.
+Welcome to the **BookMyShow Clone**, a full-fledged **backend application** built using **Spring Boot**, **Java**, **MySQL**, and **Maven**.  
+This project recreates the core logic of the popular *BookMyShow* platform — allowing users to **register, log in securely, browse movies, view shows, and book seats** — all while ensuring **data consistency**, **security**, and **concurrency control** at scale.  
 
-🔧 Overview
+---
 
-The system follows a Layered Architecture pattern, separating responsibilities into Controller, Service, and Repository layers. It includes strong concurrency control to prevent multiple users from booking the same seat, and uses BCrypt encryption for password security.
+## 🔧 Overview  
 
-This project is ideal for demonstrating backend engineering skills such as RESTful API design, transaction management, data modeling, and secure authentication.
+This system follows a **Layered Architecture** design pattern that cleanly separates application logic into distinct layers:  
+- **Controller** → Handles REST API requests and responses.  
+- **Service** → Contains core business logic.  
+- **Repository** → Handles database interactions.  
 
-✨ Key Features
+It also includes **strong concurrency control** to prevent multiple users from booking the same seat and uses **BCrypt encryption** to securely store passwords.  
 
-User Registration & Login
+This project showcases key backend engineering concepts such as:
+- RESTful API design  
+- Transaction management  
+- Data modeling and normalization  
+- Secure authentication  
+- Production-level architecture  
 
-Users can register and authenticate using credentials stored securely with BCrypt password encryption.
+---
 
-Movie and Show Management
+## ✨ Key Features  
 
-Admins can add and manage movies, shows, and theatres.
+### 👤 User Registration & Authentication  
+- Register new users with encrypted passwords using **BCrypt**.  
+- Secure login system with **Spring Security** and role-based access (USER / ADMIN).  
 
-Users can view movies and available shows.
+### 🎥 Movie & Show Management  
+- Admins can add and manage movies, theatres, and shows.  
+- Users can browse available movies and their scheduled showtimes.  
 
-Seat Booking System
+### 💺 Seat Booking System  
+- Multiple users can book seats concurrently for the same show.  
+- Prevents overbooking through **transactional isolation** and **optimistic locking**.  
 
-Multiple users can book seats simultaneously.
+### 💳 Payment Integration *(Simulated)*  
+- Each booking record is linked to a payment entry.  
+- Payment flow can be extended to integrate gateways like Razorpay or Stripe.  
 
-Concurrency is handled using Spring’s @Transactional isolation and optimistic locking to prevent overbooking.
+### 🧩 Layered Architecture  
+- Clean code organization with **Controller–Service–Repository** separation.  
+- Uses DTOs for clean API data transfer (no entity exposure).  
 
-Payment Integration (Simulated)
+### ✅ Validation & Exception Handling  
+- Input validation via annotations (`@Valid`, `@NotBlank`, etc.).  
+- Centralized error management using `@ControllerAdvice`.  
 
-Each booking is associated with a payment record.
+### 🗄️ Database Design  
+- Well-structured **relational schema** modeled in **MySQL**, optimized for joins between users, shows, and bookings.  
 
-Layered Architecture
+---
 
-Clean code structure separating API, business logic, and database operations.
+## 🧱 Database Schema  
 
-Validation & Exception Handling
+| Entity | Attributes |
+|--------|-------------|
+| **User** | id, name, email, password |
+| **Movie** | id, title, duration, rating |
+| **Theatre** | id, name, location |
+| **Show** | id, movie_id, theatre_id, show_time |
+| **Seat** | id, seat_no, theatre_id |
+| **Booking** | id, user_id, show_id, seat_id, status |
+| **Payment** | id, booking_id, amount, status |
 
-Input validation using @Valid and @NotBlank.
+### Relationships  
+- 1️⃣ **Movie → Shows** (One-to-Many)  
+- 2️⃣ **Theatre → Seats** (One-to-Many)  
+- 3️⃣ **Show → Bookings** (One-to-Many)  
+- 4️⃣ **Booking → Payment** (One-to-One)  
 
-Centralized exception handling via @ControllerAdvice.
+---
 
-Database Design
+## ⚙️ Tech Stack  
 
-Relational schema modeled in MySQL, optimized for relationships between users, movies, shows, and bookings.
+| Layer | Technology |
+|-------|-------------|
+| **Language** | Java |
+| **Framework** | Spring Boot |
+| **Database** | MySQL |
+| **ORM** | Spring Data JPA |
+| **Build Tool** | Maven |
+| **Security** | Spring Security + BCrypt |
+| **API Docs** | Swagger / OpenAPI |
+| **Version Control** | Git |
 
-🧱 Database Schema
+---
 
-User → (id, name, email, password)
+## ⚡ Concurrency Control  
 
-Movie → (id, title, duration, rating)
+The system guarantees that **no two users can book the same seat** for the same show.  
 
-Theatre → (id, name, location)
+Implemented via:
+- `@Transactional(isolation = Isolation.SERIALIZABLE)`  
+- **Optimistic Locking** using `@Version` fields  
+- **Database-level unique constraints** on seat and show combinations  
 
-Show → (id, movie_id, theatre_id, show_time)
+This ensures **thread-safe seat allocation** even under high booking traffic.  
 
-Seat → (id, seat_no, theatre_id)
+---
 
-Booking → (id, user_id, show_id, seat_id, status)
+## 🔐 Security  
 
-Payment → (id, booking_id, amount, status)
+- Passwords are stored using **BCrypt one-way hashing** with a unique salt.  
+- Designed for **JWT token-based authentication** (extendable).  
+- Implements **role-based authorization** for admin and user privileges.  
 
-Relationships:
+---
 
-One Movie → Many Shows
+## 🌟 Highlights  
 
-One Theatre → Many Seats
+- 🚀 Built with **Spring Boot** and follows **microservice-ready structure**.  
+- 🧠 Demonstrates advanced **transaction and concurrency handling**.  
+- 🔐 Implements **secure user authentication and data validation**.  
+- 💾 Uses **MySQL relational modeling** with clean entity relationships.  
+- 🧱 Designed for **scalability and maintainability**, ready for future enhancements.  
 
-One Show → Many Bookings
+---
 
-One Booking → One Payment
+## 🧠 Future Enhancements  
 
-⚙️ Tech Stack
+- Integrate **JWT authentication** for token-based security.  
+- Connect **real payment gateways** (Razorpay / Stripe).  
+- Add a **frontend UI** (React or Angular) for better user experience.  
+- Containerize with **Docker** and deploy to **AWS**.  
+- Add **caching** (Redis) for frequently accessed data like shows and movies.  
 
-Backend: Spring Boot, Java
-Database: MySQL
-ORM: Spring Data JPA
-Build Tool: Maven
-Security: Spring Security, BCrypt
-Documentation: Swagger / OpenAPI
-Version Control: Git
+---
 
-⚡ Concurrency Control
+## 🏁 Summary  
 
-The system ensures that no two users can book the same seat for the same show.
-This is achieved using:
+The **BookMyShow Clone** project demonstrates a production-grade backend system with real-world challenges like **secure authentication**, **concurrent seat booking**, and **transaction management**.  
+It reflects best practices in **Spring Boot development**, making it a perfect showcase project for **SDE or Backend Developer** roles.
 
-Spring’s @Transactional annotation with Isolation.SERIALIZABLE level.
+---
 
-Optional Optimistic Locking using @Version fields in entities.
-
-Database-level unique constraints on seat and show combinations.
-
-🔐 Security
-
-Passwords are encrypted using BCrypt before being stored in the database.
-
-Optional JWT (JSON Web Token) support can be added for stateless authentication.
-
-Role-based access control (e.g., ADMIN, USER).
+⭐ *If you like this project, consider giving it a star on GitHub!*
